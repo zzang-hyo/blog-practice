@@ -1,0 +1,354 @@
+/* 2048 미니 웹앱 — 항상 라이트 팔레트 고정 (블로그 다크모드와 무관) */
+
+:root {
+  color-scheme: light;
+  --page-bg: #faf8ef;
+  --text: #776e65;
+  --board-bg: #bbada0;
+  --cell-empty: #cdc1b4;
+  --accent: #8f7a66;
+  --accent-hover: #9f8b76;
+
+  --tile-2-bg: #eee4da;
+  --tile-2-text: #776e65;
+  --tile-4-bg: #ede0c8;
+  --tile-4-text: #776e65;
+  --tile-8-bg: #f2b179;
+  --tile-8-text: #f9f6f2;
+  --tile-16-bg: #f59563;
+  --tile-16-text: #f9f6f2;
+  --tile-32-bg: #f67c5f;
+  --tile-32-text: #f9f6f2;
+  --tile-64-bg: #f65e3b;
+  --tile-64-text: #f9f6f2;
+  --tile-128-bg: #edcf72;
+  --tile-128-text: #f9f6f2;
+  --tile-256-bg: #edcc61;
+  --tile-256-text: #f9f6f2;
+  --tile-512-bg: #edc850;
+  --tile-512-text: #f9f6f2;
+  --tile-1024-bg: #edc53f;
+  --tile-1024-text: #f9f6f2;
+  --tile-2048-bg: #edc22e;
+  --tile-2048-text: #f9f6f2;
+  --tile-super-bg: #3c3a32;
+  --tile-super-text: #f9f6f2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding: env(safe-area-inset-top, 0px) 16px env(safe-area-inset-bottom, 0px);
+}
+
+.app {
+  max-width: 500px;
+  margin: 0 auto;
+  padding-block: 24px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.app-header {
+  text-align: center;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+}
+
+.controls {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.scoreboard {
+  display: flex;
+  gap: 8px;
+}
+
+.score-box {
+  background: var(--board-bg);
+  color: #eee4da;
+  border-radius: 6px;
+  padding: 8px 16px;
+  min-width: 72px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.score-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #eee4da;
+}
+
+.score-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+#new-game-btn,
+#restart-btn,
+#win-new-game-btn,
+#keep-playing-btn {
+  background: var(--accent);
+  color: #f9f6f2;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 10px 18px;
+  cursor: pointer;
+}
+
+#new-game-btn:hover,
+#restart-btn:hover,
+#win-new-game-btn:hover,
+#keep-playing-btn:hover {
+  background: var(--accent-hover);
+}
+
+main {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.board-wrap {
+  position: relative;
+  width: min(500px, 92vw);
+}
+
+.board {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: var(--board-bg);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 12px;
+  padding: 12px;
+  touch-action: none;
+}
+
+.cell {
+  background: var(--cell-empty);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.tile {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
+}
+
+.tile[data-value="2"] {
+  background: var(--tile-2-bg);
+  color: var(--tile-2-text);
+}
+.tile[data-value="4"] {
+  background: var(--tile-4-bg);
+  color: var(--tile-4-text);
+}
+.tile[data-value="8"] {
+  background: var(--tile-8-bg);
+  color: var(--tile-8-text);
+}
+.tile[data-value="16"] {
+  background: var(--tile-16-bg);
+  color: var(--tile-16-text);
+}
+.tile[data-value="32"] {
+  background: var(--tile-32-bg);
+  color: var(--tile-32-text);
+}
+.tile[data-value="64"] {
+  background: var(--tile-64-bg);
+  color: var(--tile-64-text);
+}
+.tile[data-value="128"] {
+  background: var(--tile-128-bg);
+  color: var(--tile-128-text);
+}
+.tile[data-value="256"] {
+  background: var(--tile-256-bg);
+  color: var(--tile-256-text);
+}
+.tile[data-value="512"] {
+  background: var(--tile-512-bg);
+  color: var(--tile-512-text);
+}
+.tile[data-value="1024"] {
+  background: var(--tile-1024-bg);
+  color: var(--tile-1024-text);
+}
+.tile[data-value="2048"] {
+  background: var(--tile-2048-bg);
+  color: var(--tile-2048-text);
+}
+.tile[data-super="true"] {
+  background: var(--tile-super-bg);
+  color: var(--tile-super-text);
+}
+
+.tile[data-digits="1"],
+.tile[data-digits="2"] {
+  font-size: 2rem;
+}
+.tile[data-digits="3"] {
+  font-size: 1.5rem;
+}
+.tile[data-digits="4+"] {
+  font-size: 1.1rem;
+}
+
+@keyframes tile-pop {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes tile-merge {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.tile.new {
+  animation: tile-pop 0.15s ease-out;
+}
+
+.tile.merged {
+  animation: tile-merge 0.15s ease-out;
+}
+
+.overlay {
+  position: absolute;
+  inset: 12px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.overlay[hidden] {
+  display: none;
+}
+
+.overlay.game-over {
+  background: rgba(238, 228, 218, 0.73);
+}
+
+.overlay.win {
+  background: rgba(237, 194, 46, 0.5);
+}
+
+.overlay-title {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.overlay-score {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.overlay-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.instructions {
+  text-align: center;
+  font-size: 0.85rem;
+  max-width: 420px;
+}
+
+.app-footer {
+  font-size: 0.85rem;
+}
+
+.app-footer a {
+  color: var(--accent);
+}
+
+@media (max-width: 480px) {
+  .app-header h1 {
+    font-size: 2rem;
+  }
+
+  .score-box {
+    min-width: 60px;
+    padding: 6px 12px;
+  }
+
+  .score-value {
+    font-size: 1.1rem;
+  }
+
+  .tile[data-digits="1"],
+  .tile[data-digits="2"] {
+    font-size: 1.5rem;
+  }
+  .tile[data-digits="3"] {
+    font-size: 1.2rem;
+  }
+  .tile[data-digits="4+"] {
+    font-size: 0.9rem;
+  }
+}
