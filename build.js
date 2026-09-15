@@ -7,6 +7,7 @@ const ROOT_DIR = __dirname;
 const POSTS_DIR = path.join(ROOT_DIR, 'posts');
 const TEMPLATES_DIR = path.join(ROOT_DIR, 'templates');
 const ASSETS_DIR = path.join(ROOT_DIR, 'assets');
+const APPS_DIR = path.join(ROOT_DIR, 'apps');
 const DIST_DIR = path.join(ROOT_DIR, 'dist');
 
 function render(str, data) {
@@ -96,6 +97,10 @@ function main() {
   fs.writeFileSync(path.join(DIST_DIR, 'index.html'), indexPage, 'utf-8');
 
   fs.cpSync(ASSETS_DIR, path.join(DIST_DIR, 'assets'), { recursive: true });
+
+  if (fs.existsSync(APPS_DIR)) {
+    fs.cpSync(APPS_DIR, path.join(DIST_DIR, 'apps'), { recursive: true });
+  }
 
   console.log(`Built ${posts.length} post(s) into dist/`);
 }
