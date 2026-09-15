@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<meta name="description" content="{{DESCRIPTION}}">
+<script>
+(function () {
+  try {
+    var saved = localStorage.getItem('theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="{{ROOT}}assets/css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <nav class="site-nav">
+    <a class="site-title" href="{{ROOT}}index.html">My Blog</a>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="다크 모드 전환">🌙</button>
+  </nav>
+</header>
+<main class="site-main">
+{{BODY}}
+</main>
+<footer class="site-footer">
+  <p>&copy; 2024 My Blog</p>
+</footer>
+<script src="{{ROOT}}assets/js/main.js"></script>
+</body>
+</html>
