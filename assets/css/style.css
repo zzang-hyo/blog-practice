@@ -250,6 +250,37 @@ ul, ol {
   color: #f9f6f2;
 }
 
+.pixel-art-preview {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: #f5f5f5;
+}
+
+.pixel-art-preview .dot {
+  aspect-ratio: 1 / 1;
+  border-radius: 2px;
+}
+
+.dot.d-r {
+  background: #ff5a5a;
+}
+
+.dot.d-y {
+  background: #ffd23f;
+}
+
+.dot.d-b {
+  background: #3a86ff;
+}
+
+.dot.d-g {
+  background: #4cd28a;
+}
+
+.dot.d-o {
+  background: #ff8c42;
+}
+
 .app-card-body {
   padding: 1rem;
 }
